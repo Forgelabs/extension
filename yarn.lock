@@ -13461,8 +13461,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@babel/core": ^7.13.8
-    "@polkadot/dev": ^0.62.5
+    "@babel/core": ^7.12.13
+    "@polkadot/api": ^4.0.3
+    "@polkadot/dev": ^0.61.25
     "@types/jest": ^26.0.20
     bs58: ^4.0.1
     eventemitter3: ^4.0.7
@@ -13470,14 +13471,9 @@ __metadata:
     lodash: ^4.17.21
     query-string: ^6.14.1
     sinon-chrome: ^3.0.1
-<<<<<<< HEAD
     store: ^2.0.12
     stylelint: ^13.9.0
     stylelint-config-recommended: ^3.0.0
-=======
-    stylelint: ^13.12.0
-    stylelint-config-recommended: ^4.0.0
->>>>>>> BubbleBear/batch-export
     stylelint-config-styled-components: ^0.1.1
   languageName: unknown
   linkType: soft

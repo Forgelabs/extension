@@ -16,14 +16,14 @@ interface Props extends ContactProps {
   className?: string;
 }
 
-function Contact ({ className = '', contact }: Props): React.ReactElement<Props> {
+function Contact ({ canEdit = false, className = '', contact }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const onAction = useContext(ActionContext);
   const { show } = useToast();
 
   const _goToContactEdit = useCallback(
     () => {
-      const stringified = queryString.stringifyUrl({ url: 'add-contact?', query: { ...contact, isEdit: true } });
+      const stringified = queryString.stringifyUrl({ url: 'add-contact?', query: { ...contact, identity: JSON.stringify(contact.identity), isEdit: true } });
 
       onAction(stringified);
     }, [onAction]
@@ -59,12 +59,16 @@ function Contact ({ className = '', contact }: Props): React.ReactElement<Props>
           {contact.network}
         </div>
 
-        <div onClick={_goToContactEdit}>
-          <Svg
-            className='edit'
-            src={EditIcon}
-          />
-        </div>
+        {
+          canEdit && (
+            <div onClick={_goToContactEdit}>
+              <Svg
+                className='edit'
+                src={EditIcon}
+              />
+            </div>
+          )
+        }
       </div>
     </div>
   );
