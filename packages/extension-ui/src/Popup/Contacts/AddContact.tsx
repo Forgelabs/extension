@@ -70,21 +70,28 @@ function formatIdentity (identity: Record<string, string>): Identity {
   }
 
   const { info, judgements } = identity;
-  const isKnownGood = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Known Good'));
-  const isReasonable = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Reasonable'));
-  const isLowQuality = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Low Qualit'));
-  const isErroneous = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Erroneous'));
+  const isKnownGood = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Known Good') || Object.prototype.hasOwnProperty.call(judgement, 'known good'));
+  const isReasonable = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Reasonable') || Object.prototype.hasOwnProperty.call(judgement, 'reasonable'));
+  const isLowQuality = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Low Qualit') || Object.prototype.hasOwnProperty.call(judgement, 'low qualit'));
+  const isErroneous = judgements.some(([, judgement]) => Object.prototype.hasOwnProperty.call(judgement, 'Erroneous') || Object.prototype.hasOwnProperty.call(judgement, 'erroneous'));
+
+  const display = (info.display && (info.display.Raw || info.display.raw)) || '';
+  const legal = (info.legal && (info.legal.Raw || info.legal.raw)) || '';
+  const email = (info.email && (info.email.Raw || info.email.raw)) || '';
+  const web = (info.web && (info.web.Raw || info.web.raw)) || '';
+  const twitter = (info.twitter && (info.twitter.Raw || info.twitter.raw)) || '';
+  const riot = (info.riot && (info.riot.Raw || info.riot.raw)) || '';
 
   return {
     isBad: isLowQuality || isErroneous,
     isGood: isKnownGood || isReasonable,
     info: {
-      Display: info.display.Raw ? hexToString(info.display.Raw) : '',
-      Legal: info.legal.Raw ? hexToString(info.legal.Raw) : '',
-      Email: info.email.Raw ? hexToString(info.email.Raw) : '',
-      Web: info.web.Raw ? hexToString(info.web.Raw) : '',
-      Twitter: info.twitter.Raw ? hexToString(info.twitter.Raw) : '',
-      Riot: info.riot.Raw ? hexToString(info.riot.Raw) : ''
+      Display: hexToString(display),
+      Legal: hexToString(legal),
+      Email: hexToString(email),
+      Web: hexToString(web),
+      Twitter: hexToString(twitter),
+      Riot: hexToString(riot)
     }
   } as Identity;
 }
@@ -136,7 +143,7 @@ function AddContact ({ className = '' }: Props): React.ReactElement<Props> {
   const [identity, setIdentity] = useState<Identity>(emptyIdentity);
 
   // Get identity from the specific chain state and then update the identity infomation
-  async function updateIdentity (endpoint: string): Promise<void> {
+  async function updateIdentity (endpoint: string, address: string): Promise<void> {
     if (endpoint) {
       setTips('Getting identity info from the chain state...');
       const wsProvider = new WsProvider(endpoint);
@@ -202,7 +209,7 @@ function AddContact ({ className = '' }: Props): React.ReactElement<Props> {
 
         setNetwork(chain?.chain);
         setError('');
-        updateIdentity(endpoint);
+        updateIdentity(endpoint, address);
       } else {
         setError('Invalid address');
       }
