@@ -268,7 +268,7 @@ function AddContact ({ className = '' }: Props): React.ReactElement<Props> {
         showBackArrow
         showContactDelete={isEdit}
         smallMargin
-        text={t<string>('New Contact')}
+        text={t<string>(isEdit ? 'Edit Contact' : 'New Contact')}
         toggleDelete={_goToDelete}
       />
 
